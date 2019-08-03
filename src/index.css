@@ -1,13 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'VT323', 'Courier New', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 20px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  color: #6C6C6C;
+  background-color: #DDFFDF;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.game {
+  display: block;
+  width: 100%;
+  max-width: 414px;
+  height: 100vh;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+}
+
+.intro {
+  display: grid;
+  grid-template-rows: min-content auto min-content;
+  height: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  text-align: center;
+  margin: 0px;
+  font-size: 60px;
+}
+
+.subtitle {
+  text-align: center;
+}
+
+a {
+  color: #8D8D8D;
+  font-weight: bold;
+}
+
+.logo {
+  width: 100%;
+}
+
+.footer {
+  text-align: center;
 }
