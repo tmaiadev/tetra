@@ -87,6 +87,7 @@ export default function() {
   const $gameplay = document.querySelector('.gameplay');
   const $canvas = document.querySelector('.canvas');
   const $score = document.querySelector('.score');
+  const $best = document.querySelector('.best');
 
   const WIDTH = $canvas.clientWidth;
   const BLOCK_SIZE = WIDTH / 20;
@@ -101,6 +102,7 @@ export default function() {
   
   const state = {
     score: 0,
+    best: parseInt(localStorage.getItem('best') || 0, 10),
     block: new Block(),
     wall: build_empty_wall(NLINES),
     lastFrame: 0,
@@ -121,7 +123,15 @@ export default function() {
 
       clear_wall(wall, () => {
         state.score++;
+        const best = parseInt(localStorage.getItem('best') || 0, 10)
+
+        if (state.score > best) {
+          state.best = state.score;
+          localStorage.setItem('best', state.score);
+        }
+
         $score.innerHTML = state.score;
+        $best.innerHTML = state.best;
       });
 
       state.lastFrame = ts;
@@ -205,6 +215,7 @@ export default function() {
     block.y = shadow.y;
   });
 
+  $best.innerHTML = state.best;
   $gameplay.classList.remove('hidden');
   update();
 }

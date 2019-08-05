@@ -97,7 +97,7 @@ a {
 
 .status {
   display: grid;
-  grid-template-columns: auto min-content;
+  grid-template-columns: auto auto min-content;
 }
 
 .pause {
