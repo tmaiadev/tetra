@@ -106,6 +106,7 @@ export default function() {
     block: new Block(),
     wall: build_empty_wall(NLINES),
     lastFrame: 0,
+    controlsLocked: false,
   }
 
   function update(ts) {
@@ -134,6 +135,7 @@ export default function() {
         $best.innerHTML = state.best;
       });
 
+      state.controlsLocked = false;
       state.lastFrame = ts;
     }
     requestAnimationFrame(render);
@@ -155,7 +157,10 @@ export default function() {
   }
 
   controls.on(controls.KEYS.LEFT, () => {
-    const { block, wall } = state;
+    const { block, wall, controlsLocked } = state;
+
+    // do nothing if controls are locked
+    if (controlsLocked) return;
     
     // move block
     block.x -= 1;
@@ -167,7 +172,10 @@ export default function() {
   });
 
   controls.on(controls.KEYS.RIGHT, () => {
-    const { block, wall } = state;
+    const { block, wall, controlsLocked } = state;
+
+    // do nothing if controls are locked
+    if (controlsLocked) return;
 
     // move block
     block.x += 1;
@@ -187,7 +195,10 @@ export default function() {
   });
 
   controls.on(controls.KEYS.UP, () => {
-    const { block, wall } = state;
+    const { block, wall, controlsLocked } = state;
+
+    // do nothing if controls are locked
+    if (controlsLocked) return;
 
     // rotates block
     block.rotate();
@@ -210,9 +221,16 @@ export default function() {
   });
 
   controls.on(controls.KEYS.DOWN, () => {
-    const { block, wall } = state;
+    const { block, wall, controlsLocked } = state;
+
+    // do nothing if controls are locked
+    if (controlsLocked) return;
+
     const shadow = shadow_of_block(block, wall);
     block.y = shadow.y;
+
+    // lock controls
+    state.controlsLocked = true;
   });
 
   $best.innerHTML = state.best;
