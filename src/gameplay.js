@@ -28,6 +28,7 @@ export default function() {
   
   const state = {
     score: 0,
+    speed: 500,
     best: parseInt(localStorage.getItem('best') || 0, 10),
     block: new Block(),
     wall: build_empty_wall(NLINES),
@@ -37,9 +38,9 @@ export default function() {
 
   function update(ts) {
     const diffts = ts - state.lastFrame;
-    const { block, wall } = state;
+    const { block, wall, speed } = state;
 
-    if (diffts > 300) {
+    if (diffts > speed) {
       block.y += 1;
 
       if (block.collided(wall)) {
@@ -49,14 +50,21 @@ export default function() {
       }
 
       clear_wall(wall, () => {
-        state.score++;
-        const best = parseInt(localStorage.getItem('best') || 0, 10)
+        // increase speed
+        state.speed -= 10;
+        if (state.speed < 50) state.speed = 50;
 
+        // update score
+        state.score++;
+
+        // update best score
+        const best = parseInt(localStorage.getItem('best') || 0, 10)
         if (state.score > best) {
           state.best = state.score;
           localStorage.setItem('best', state.score);
         }
 
+        // render score
         $score.innerHTML = state.score;
         $best.innerHTML = state.best;
       });
