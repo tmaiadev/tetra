@@ -26,9 +26,12 @@ class Controls {
     this._onTouchStart = this._onTouchStart.bind(this);
     this._onTouchMove = this._onTouchMove.bind(this);
     this._onTouchEnd = this._onTouchEnd.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
+
     window.addEventListener('touchstart', this._onTouchStart);
     window.addEventListener('touchmove', this._onTouchMove);
     window.addEventListener('touchend', this._onTouchEnd);
+    window.addEventListener('keydown', this._onKeyDown);
   }
 
   _fire(key, inputType) {
@@ -67,6 +70,15 @@ class Controls {
   }
 
   _onTouchEnd() {
+    const { TOUCH } = this.INPUT_TYPE;
+    const {
+      UP,
+      DOWN,
+      LEFT,
+      RIGHT,
+      ENTER,
+    } = this.KEYS;
+
     const movedX = this._touchMoveX - this._touchInitX;
     const movedY = this._touchMoveY - this._touchInitY;
     
@@ -77,12 +89,12 @@ class Controls {
 
     if (diffX < 10 && diffY < 10) {
       // Fire ENTER
-      this._fire(this.KEYS.ENTER, this.INPUT_TYPE.TOUCH);
+      this._fire(ENTER, TOUCH);
       
       if (this._touchInitX < window.innerWidth / 2) {
-        this._fire(this.KEYS.LEFT, this.INPUT_TYPE.TOUCH);
+        this._fire(LEFT, TOUCH);
       } else {
-        this._fire(this.KEYS.RIGHT, this.INPUT_TYPE.TOUCH);
+        this._fire(RIGHT, TOUCH);
       }
 
       return;
@@ -92,11 +104,52 @@ class Controls {
       // Y axis
       if (movedY < 0) {
         // UP
-        this._fire(this.KEYS.UP, this.INPUT_TYPE.TOUCH);
+        this._fire(UP, TOUCH);
       } else {
         // DOWN
-        this._fire(this.KEYS.DOWN, this.INPUT_TYPE.TOUCH);
+        this._fire(DOWN, TOUCH);
       }
+    }
+  }
+
+  _onKeyDown(evt) {
+    const key = evt.key.toLowerCase();
+    const { KEYBOARD } = this.INPUT_TYPE;
+    const {
+      UP,
+      DOWN,
+      LEFT,
+      RIGHT,
+      ENTER,
+    } = this.KEYS;
+    
+    switch (key) {
+      case 'arrowup':
+      case 'w':
+        this._fire(UP, KEYBOARD);
+        break;
+
+      case 'arrowdown':
+      case 's':
+        this._fire(DOWN, KEYBOARD);
+        break;
+
+      case 'arrowleft':
+      case 'a':
+        this._fire(LEFT, KEYBOARD);
+        break;
+
+      case 'arrowright':
+      case 'd':
+        this._fire(RIGHT, KEYBOARD);
+        break;
+
+      case 'ENTER':
+        this._fire(ENTER, KEYBOARD);
+        break;
+
+      default:
+        break;
     }
   }
 
