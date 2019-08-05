@@ -129,4 +129,37 @@ export default class {
       this._shapeIndex = 0;
     }
   }
+
+  unrotate() {
+    this._shapeIndex--;
+    
+    if (this._shapeIndex < 0) {
+      this._shapeIndex = this._shapes.length - 1;
+    }
+  }
+
+  collided(wall) {
+    let collided = false;
+
+    this
+      .shape
+      .forEach((columns, blockY) => {
+        const y = blockY + this.y;
+        if (y > wall.length - 1) {
+          collided = true;
+          return;
+        }
+
+        columns
+          .forEach((filled, blockX) => {
+            const x = blockX + this.x;
+
+            if (filled && wall[y][x]) {
+              collided = true;
+            }
+          });
+      });
+
+    return collided;
+  }
 }

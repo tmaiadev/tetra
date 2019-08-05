@@ -3,11 +3,11 @@ import Block from './block';
 
 function render_pixel(ctx, size, x, y) {
   const border = 2;
-  ctx.fillRect(x * size, y * size, size, border); // top
-  ctx.fillRect(x * size, y * size + size - border, size, border); // bottom
-  ctx.fillRect(x * size, y * size, border, size); // left
-  ctx.fillRect(x * size + size - border, y * size, border, size); // right
-  ctx.fillRect(x * size + border * 2, y * size + border * 2, size / 2, size / 2); // middle
+  ctx.fillRect(x * size, y * size - (size * 2), size, border); // top
+  ctx.fillRect(x * size, y * size + size - border - (size * 2), size, border); // bottom
+  ctx.fillRect(x * size, y * size - (size * 2), border, size); // left
+  ctx.fillRect(x * size + size - border, y * size - (size * 2), border, size); // right
+  ctx.fillRect(x * size + border * 2, y * size + border * 2 - (size * 2), size / 2, size / 2); // middle
 }
 
 function render_block(ctx, size, block) {
@@ -20,6 +20,20 @@ function render_block(ctx, size, block) {
           render_pixel(ctx, size, x + block.x, y + block.y);
         });
     });
+}
+
+function build_empty_wall(nlines) {
+  const wall = [];
+
+  for (let i = 0; i < nlines; i++) {
+    const cols = [];
+    for (let j = 0; j < 20; j++) {
+      cols.push(0);
+    }
+    wall.push(cols);
+  }
+
+  return wall;
 }
 
 export default function() {
@@ -40,13 +54,21 @@ export default function() {
   
   const state = {
     block: new Block(),
+    wall: build_empty_wall(NLINES),
     lastFrame: 0,
   }
 
   function update(ts) {
     const diffts = ts - state.lastFrame;
+    const { block, wall } = state;
+
     if (diffts > 300) {
-      state.block.y += 1;
+      block.y += 1;
+
+      if (block.collided(wall)) {
+        block.y -= 1;
+      }
+
       state.lastFrame = ts;
     }
     requestAnimationFrame(render);
@@ -59,15 +81,58 @@ export default function() {
   }
 
   controls.on(controls.KEYS.LEFT, () => {
-    state.block.x -= 1;
+    const { block, wall } = state;
+    
+    // move block
+    block.x -= 1;
+
+    // undo if block collides or is out of sight
+    if (block.x < 0 || block.collided(wall)) {
+      block.x += 1;
+    } 
   });
 
   controls.on(controls.KEYS.RIGHT, () => {
-    state.block.x += 1;
+    const { block, wall } = state;
+
+    // move block
+    block.x += 1;
+
+    const blockMaxX = block.x + block
+      .shape
+      .reduce((prev, curr) => {
+        const length = curr.length - 1;
+        if (length > prev) prev = length;
+        return prev;
+      }, 0);
+
+    // undo if block collides or is out of sight
+    if (blockMaxX > 19 || block.collided(wall)) {
+      block.x -= 1;
+    }
   });
 
   controls.on(controls.KEYS.UP, () => {
-    state.block.rotate();
+    const { block, wall } = state;
+
+    // rotates block
+    block.rotate();
+
+    const blockMaxX = block.x + block
+      .shape
+      .reduce((prev, curr) => {
+        const length = curr.length - 1;
+        if (length > prev) prev = length;
+        return prev;
+      }, 0);
+    const blockMaxY = block.x + (block.shape.length - 1);
+
+    // undo if block collides or is out of sight
+    if (
+      blockMaxX > 19 ||
+      blockMaxY > NLINES ||
+      block.collided(wall)
+    ) block.unrotate();
   });
 
   $gameplay.classList.remove('hidden');
