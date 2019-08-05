@@ -14,6 +14,7 @@ export default function() {
   const $canvas = document.querySelector('.canvas');
   const $score = document.querySelector('.score');
   const $best = document.querySelector('.best');
+  const $pause = document.querySelector('.pause');
 
   const WIDTH = $canvas.clientWidth;
   const BLOCK_SIZE = WIDTH / 20;
@@ -27,6 +28,7 @@ export default function() {
   const ctx = $canvas.getContext('2d');
   
   const state = {
+    pause: false,
     score: 0,
     speed: 500,
     best: parseInt(localStorage.getItem('best') || 0, 10),
@@ -36,9 +38,28 @@ export default function() {
     controlsLocked: false,
   }
 
+  function togglePause(evt) {
+    if (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+
+    state.pause = !state.pause;
+    if (state.pause) {
+      $pause.innerHTML = 'Resume';
+    } else {
+      $pause.innerHTML = 'Pause';
+    }
+  }
+
   function update(ts) {
     const diffts = ts - state.lastFrame;
-    const { block, wall, speed } = state;
+    const { block, wall, speed, pause } = state;
+
+    if (pause) {
+      requestAnimationFrame(update);
+      return;
+    }
 
     if (diffts > speed) {
       block.y += 1;
@@ -166,6 +187,12 @@ export default function() {
     // lock controls
     state.controlsLocked = true;
   });
+
+  controls.on(controls.KEYS.PAUSE, togglePause);
+
+  // adds function to pause button
+  $pause.addEventListener('touchend', togglePause);
+  $pause.addEventListener('mouseup', togglePause);
 
   $best.innerHTML = state.best;
   $gameplay.classList.remove('hidden');

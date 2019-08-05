@@ -5,7 +5,8 @@ class Controls {
       UP: 'UP',
       DOWN: 'DOWN',
       LEFT: 'LEFT',
-      RIGHT: 'RIGHT'
+      RIGHT: 'RIGHT',
+      PAUSE: 'PAUSE',
     };
 
     this.INPUT_TYPE = {
@@ -121,6 +122,7 @@ class Controls {
       LEFT,
       RIGHT,
       ENTER,
+      PAUSE,
     } = this.KEYS;
     
     switch (key) {
@@ -146,6 +148,10 @@ class Controls {
 
       case 'enter':
         this._fire(ENTER, KEYBOARD);
+        break;
+
+      case 'p':
+        this._fire(PAUSE, KEYBOARD);
         break;
 
       default:
