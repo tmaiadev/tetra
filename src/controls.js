@@ -144,7 +144,7 @@ class Controls {
         this._fire(RIGHT, KEYBOARD);
         break;
 
-      case 'ENTER':
+      case 'enter':
         this._fire(ENTER, KEYBOARD);
         break;
 
