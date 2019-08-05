@@ -1,87 +1,13 @@
 import controls from './controls';
 import Block from './block';
-
-function render_pixel(ctx, size, x, y) {
-  const border = 2;
-  ctx.fillRect(x * size, y * size - (size * 2), size, border); // top
-  ctx.fillRect(x * size, y * size + size - border - (size * 2), size, border); // bottom
-  ctx.fillRect(x * size, y * size - (size * 2), border, size); // left
-  ctx.fillRect(x * size + size - border, y * size - (size * 2), border, size); // right
-  ctx.fillRect(x * size + border * 2, y * size + border * 2 - (size * 2), size / 2, size / 2); // middle
-}
-
-function render_block(ctx, size, block) {
-  block
-    .shape
-    .forEach((columns, y) => {
-      columns
-        .forEach((filled, x) => {
-          if (!filled) return;
-          render_pixel(ctx, size, x + block.x, y + block.y);
-        });
-    });
-}
-
-function render_wall(ctx, size, wall) {
-  wall
-    .forEach((columns, y) => {
-      columns.forEach((filled, x) => {
-        if (filled) render_pixel(ctx, size, x, y);
-      });
-    });
-}
-
-function shadow_of_block(block, wall) {
-  const shadow = Object.assign({}, block);
-  Object.setPrototypeOf(shadow, Block.prototype);
-
-  while (shadow.collided(wall) === false) {
-    shadow.y += 1;
-  }
-
-  shadow.y -= 1;
-  return shadow;
-}
-
-function build_empty_wall(nlines) {
-  const wall = [];
-
-  for (let i = 0; i < nlines; i++) {
-    const cols = [];
-    for (let j = 0; j < 20; j++) {
-      cols.push(0);
-    }
-    wall.push(cols);
-  }
-
-  return wall;
-}
-
-function merge_block_with_wall(wall, block) {
-  block
-    .shape
-    .forEach((columns, blockY) => {
-      const y = blockY + block.y;
-      columns
-        .forEach((filled, blockX) => {
-          const x = block.x + blockX;
-          if (filled) wall[y][x] = 1;
-        });
-    });
-}
-
-function clear_wall(wall, successCallback) {
-  wall
-    .forEach((columns, index) => {
-      if (columns.length === columns.filter(cell => cell === 1).length) {
-        successCallback();
-        wall.splice(index, 1);
-        const newline = [];
-        for (let i = 0; i < 20; i++) newline.push(0);
-        wall.unshift(newline);
-      }
-    });
-}
+import {
+  render_block,
+  render_wall,
+  shadow_of_block,
+  build_empty_wall,
+  merge_block_with_wall,
+  clear_wall,
+} from './helpers';
 
 export default function() {
   const $gameplay = document.querySelector('.gameplay');
