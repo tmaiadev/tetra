@@ -22,6 +22,15 @@ function render_block(ctx, size, block) {
     });
 }
 
+function render_wall(ctx, size, wall) {
+  wall
+    .forEach((columns, y) => {
+      columns.forEach((filled, x) => {
+        if (filled) render_pixel(ctx, size, x, y);
+      });
+    });
+}
+
 function build_empty_wall(nlines) {
   const wall = [];
 
@@ -34,6 +43,19 @@ function build_empty_wall(nlines) {
   }
 
   return wall;
+}
+
+function merge_block_with_wall(wall, block) {
+  block
+    .shape
+    .forEach((columns, blockY) => {
+      const y = blockY + block.y;
+      columns
+        .forEach((filled, blockX) => {
+          const x = block.x + blockX;
+          if (filled) wall[y][x] = 1;
+        });
+    });
 }
 
 export default function() {
@@ -67,6 +89,8 @@ export default function() {
 
       if (block.collided(wall)) {
         block.y -= 1;
+        merge_block_with_wall(wall, block);
+        state.block = new Block();
       }
 
       state.lastFrame = ts;
@@ -77,6 +101,7 @@ export default function() {
   function render() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
     render_block(ctx, BLOCK_SIZE, state.block);
+    render_wall(ctx, BLOCK_SIZE, state.wall);
     requestAnimationFrame(update);
   }
 
