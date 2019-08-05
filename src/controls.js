@@ -110,6 +110,16 @@ class Controls {
         // DOWN
         this._fire(DOWN, TOUCH);
       }
+
+      return;
+    }
+
+    // X axis
+    if (movedX < 0) {
+      // LEFT
+      this._fire(LEFT, TOUCH);
+    } else {
+      this._fire(RIGHT, TOUCH);
     }
   }
 
