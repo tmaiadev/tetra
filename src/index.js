@@ -1,3 +1,8 @@
+import intro from './intro';
 import './index.css';
 
-document.addEventListener('touchmove', evt => evt.preventDefault(), { passive: true });
+// Disable bouncing scroll on iOS
+document.addEventListener('touchmove', evt => evt.preventDefault(), { passive: false });
+
+// Init intro
+intro();
