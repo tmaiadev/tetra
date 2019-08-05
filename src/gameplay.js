@@ -31,6 +31,18 @@ function render_wall(ctx, size, wall) {
     });
 }
 
+function shadow_of_block(block, wall) {
+  const shadow = Object.assign({}, block);
+  Object.setPrototypeOf(shadow, Block.prototype);
+
+  while (shadow.collided(wall) === false) {
+    shadow.y += 1;
+  }
+
+  shadow.y -= 1;
+  return shadow;
+}
+
 function build_empty_wall(nlines) {
   const wall = [];
 
@@ -72,7 +84,6 @@ export default function() {
   $canvas.height = HEIGHT;
 
   const ctx = $canvas.getContext('2d');
-  ctx.fillStyle = `rgb(108, 108, 108)`;
   
   const state = {
     block: new Block(),
@@ -99,9 +110,17 @@ export default function() {
   }
   
   function render() {
+    const { block, wall } = state;
+    
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    render_block(ctx, BLOCK_SIZE, state.block);
-    render_wall(ctx, BLOCK_SIZE, state.wall);
+    
+    ctx.fillStyle = 'rgb(193, 219, 195)';
+    render_block(ctx, BLOCK_SIZE, shadow_of_block(block, wall));
+
+    ctx.fillStyle = 'rgb(108, 108, 108)';
+    render_block(ctx, BLOCK_SIZE, block);
+    render_wall(ctx, BLOCK_SIZE, wall);
+    
     requestAnimationFrame(update);
   }
 
