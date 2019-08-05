@@ -70,9 +70,23 @@ function merge_block_with_wall(wall, block) {
     });
 }
 
+function clear_wall(wall, successCallback) {
+  wall
+    .forEach((columns, index) => {
+      if (columns.length === columns.filter(cell => cell === 1).length) {
+        successCallback();
+        wall.splice(index, 1);
+        const newline = [];
+        for (let i = 0; i < 20; i++) newline.push(0);
+        wall.unshift(newline);
+      }
+    });
+}
+
 export default function() {
   const $gameplay = document.querySelector('.gameplay');
   const $canvas = document.querySelector('.canvas');
+  const $score = document.querySelector('.score');
 
   const WIDTH = $canvas.clientWidth;
   const BLOCK_SIZE = WIDTH / 20;
@@ -86,6 +100,7 @@ export default function() {
   const ctx = $canvas.getContext('2d');
   
   const state = {
+    score: 0,
     block: new Block(),
     wall: build_empty_wall(NLINES),
     lastFrame: 0,
@@ -103,6 +118,11 @@ export default function() {
         merge_block_with_wall(wall, block);
         state.block = new Block();
       }
+
+      clear_wall(wall, () => {
+        state.score++;
+        $score.innerHTML = state.score;
+      });
 
       state.lastFrame = ts;
     }

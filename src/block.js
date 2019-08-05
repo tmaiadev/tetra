@@ -108,7 +108,7 @@ function getNewBlockShape() {
     ],
   ];
 
-  return shapes[Math.round(Math.random() * shapes.length - 1)];
+  return shapes[Math.round(Math.random() * (shapes.length - 1))];
 }
 
 export default class {
