@@ -179,6 +179,12 @@ export default function() {
     ) block.unrotate();
   });
 
+  controls.on(controls.KEYS.DOWN, () => {
+    const { block, wall } = state;
+    const shadow = shadow_of_block(block, wall);
+    block.y = shadow.y;
+  });
+
   $gameplay.classList.remove('hidden');
   update();
 }
