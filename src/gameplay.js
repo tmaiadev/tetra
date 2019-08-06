@@ -15,12 +15,16 @@ export default function() {
   const $score = document.querySelector('.score');
   const $best = document.querySelector('.best');
   const $pause = document.querySelector('.pause');
+  const $alert = document.querySelector('.alert');
+
+  // Show gameplay
+  $gameplay.classList.remove('hidden');
 
   const WIDTH = $canvas.clientWidth;
   const BLOCK_SIZE = WIDTH / 20;
   const NLINES = Math.floor($canvas.clientHeight / BLOCK_SIZE) + 2;
   const HEIGHT = (NLINES - 2) * BLOCK_SIZE;
-  
+
   $canvas.style.height = `${HEIGHT}px`;
   $canvas.width = WIDTH;
   $canvas.height = HEIGHT;
@@ -36,6 +40,10 @@ export default function() {
     wall: build_empty_wall(NLINES),
     lastFrame: 0,
     controlsLocked: false,
+    gameOver: false,
+    gameOverAniFrame: 0,
+    newGame: false,
+    newGameAniFrame: 0,
   }
 
   function togglePause(evt) {
@@ -54,10 +62,75 @@ export default function() {
 
   function update(ts) {
     const diffts = ts - state.lastFrame;
-    const { block, wall, speed, pause } = state;
+    const {
+      block,
+      wall,
+      speed,
+      pause,
+      gameOver,
+      gameOverAniFrame,
+      newGame,
+      newGameAniFrame,
+    } = state;
 
     if (pause) {
       requestAnimationFrame(update);
+      return;
+    }
+
+    if (gameOver) {
+      const index = wall.length - 1 - gameOverAniFrame;
+      
+      if (index >= 0) {
+        for (let i = 0; i < 20; i++) {
+          wall[index][i] = 1;
+        }
+
+        state.gameOverAniFrame++;
+        requestAnimationFrame(render);
+        return;
+      }
+
+      $alert.innerHTML = 'GAME OVER';
+      $alert.classList.remove('hidden');
+
+      controls.on(controls.KEYS.ENTER, (uid) => {
+        controls.clear(uid);
+        $alert.classList.add('hidden');
+        state.gameOver = false;
+        state.gameOverAniFrame = 0;
+        state.newGame = true;
+        state.newGameAniFrame = 0;
+        requestAnimationFrame(update);
+      });
+      
+      return;
+    }
+
+    if (newGame) {
+      if (wall[newGameAniFrame]) {
+        for (let i = 0; i < 20; i++) {
+          wall[newGameAniFrame][i] = 0;
+        }
+
+        state.newGameAniFrame++;
+        requestAnimationFrame(render);
+        return;
+      }
+
+      state.newGameAniFrame = 0;
+      state.newGame = false;
+      state.block = new Block();
+      state.score = 0;
+      state.speed = 500;
+      $score.innerHTML = 0;
+      requestAnimationFrame(update);
+      return;
+    }
+
+    if (wall[0].find(b => b === 1)) {
+      state.gameOver = true;
+      requestAnimationFrame(render);
       return;
     }
 
@@ -93,16 +166,19 @@ export default function() {
       state.controlsLocked = false;
       state.lastFrame = ts;
     }
+
     requestAnimationFrame(render);
   }
   
   function render() {
-    const { block, wall } = state;
+    const { block, wall, newGame } = state;
     
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
     
-    ctx.fillStyle = 'rgb(193, 219, 195)';
-    render_block(ctx, BLOCK_SIZE, shadow_of_block(block, wall));
+    if (newGame === false) {
+      ctx.fillStyle = 'rgb(193, 219, 195)';
+      render_block(ctx, BLOCK_SIZE, shadow_of_block(block, wall));
+    }
 
     ctx.fillStyle = 'rgb(108, 108, 108)';
     render_block(ctx, BLOCK_SIZE, block);
@@ -195,6 +271,5 @@ export default function() {
   $pause.addEventListener('mouseup', togglePause);
 
   $best.innerHTML = state.best;
-  $gameplay.classList.remove('hidden');
   update();
 }

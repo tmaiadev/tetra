@@ -76,10 +76,6 @@ a {
   text-align: center;
 }
 
-.hidden {
-  display: none;
-}
-
 .gameplay {
   display: grid;
   grid-template-rows: auto min-content;
@@ -109,4 +105,19 @@ a {
   margin: 0px;
   border: none;
   font-weight: normal;
+}
+
+.alert {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px 16px;
+  background-color: #DDFFDF;
+  border: solid thin #6C6C6C;
+}
+
+.hidden {
+  display: none;
 }
