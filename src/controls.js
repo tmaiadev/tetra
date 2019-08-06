@@ -75,10 +75,12 @@ class Controls {
       setTimeout(longPress.bind(this, id), 150);
     }
 
-    setTimeout(longPress.bind(this, this._touchId), 150);
+    setTimeout(longPress.bind(this, this._touchId), 300);
   }
 
   _onTouchMove(evt) {
+    this._touchId = null;
+
     const {
       clientX: x,
       clientY: y,
