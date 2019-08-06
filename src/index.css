@@ -105,6 +105,7 @@ a {
   margin: 0px;
   border: none;
   font-weight: normal;
+  outline: none;
 }
 
 .alert {

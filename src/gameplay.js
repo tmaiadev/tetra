@@ -46,16 +46,16 @@ export default function() {
     newGameAniFrame: 0,
   }
 
-  function togglePause(evt) {
-    if (evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
-    }
-
+  function togglePause() {
     state.pause = !state.pause;
     if (state.pause) {
+      state.controlsLocked = true;
+      $alert.innerHTML = 'PAUSED';
+      $alert.classList.remove('hidden');
       $pause.innerHTML = 'Resume';
     } else {
+      state.controlsLocked = false;
+      $alert.classList.add('hidden');
       $pause.innerHTML = 'Pause';
     }
   }
@@ -128,7 +128,7 @@ export default function() {
       return;
     }
 
-    if (wall[0].find(b => b === 1)) {
+    if (wall[2].find(b => b === 1)) {
       state.gameOver = true;
       requestAnimationFrame(render);
       return;
@@ -171,11 +171,11 @@ export default function() {
   }
   
   function render() {
-    const { block, wall, newGame } = state;
+    const { block, wall, newGame, gameOver } = state;
     
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
     
-    if (newGame === false) {
+    if (newGame === false && gameOver === false) {
       ctx.fillStyle = 'rgb(193, 219, 195)';
       render_block(ctx, BLOCK_SIZE, shadow_of_block(block, wall));
     }
@@ -267,8 +267,11 @@ export default function() {
   controls.on(controls.KEYS.PAUSE, togglePause);
 
   // adds function to pause button
-  $pause.addEventListener('touchend', togglePause);
-  $pause.addEventListener('mouseup', togglePause);
+  $pause.addEventListener('touchstart', (e) => e.stopPropagation());
+  $pause.addEventListener('touchend', (e) => {
+    e.stopPropagation();
+    togglePause();
+  });
 
   $best.innerHTML = state.best;
   update();
