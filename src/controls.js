@@ -21,7 +21,6 @@ class Controls {
     this._touchInitY = 0;
     this._touchMoveX = 0;
     this._touchMoveY = 0;
-    this._isPressing = false;
   }
 
   _init() {
@@ -59,32 +58,27 @@ class Controls {
     this._touchMoveX = x;
     this._touchInitY = y;
     this._touchMoveY = y;
-    this._isPressing = true;
-    this._pressIntvl = null;
+    this._touchId = this._uid();
 
-    const moveIfPressing = () => {
-      if (!this._isPressing) return;
+    const longPress = (id) => {
+      if (this._touchId === null || this._touchId !== id) return;
       
       const { LEFT, RIGHT } = this.KEYS;
       const { TOUCH } = this.INPUT_TYPE;
-      
+
       if (this._touchInitX < window.innerWidth / 2) {
         this._fire(LEFT, TOUCH);
       } else {
         this._fire(RIGHT, TOUCH);
       }
-      
-      setTimeout(moveIfPressing, 100);
+
+      setTimeout(longPress.bind(this, id), 150);
     }
 
-    this._pressIntvl = setTimeout(moveIfPressing, 300);
+    setTimeout(longPress.bind(this, this._touchId), 150);
   }
 
   _onTouchMove(evt) {
-    this._isPressing = false;
-    if (this._pressIntvl)
-      clearInterval(this._pressIntvl);
-
     const {
       clientX: x,
       clientY: y,
@@ -95,9 +89,7 @@ class Controls {
   }
 
   _onTouchEnd() {
-    this._isPressing = false;
-    if (this._pressIntvl)
-      clearInterval(this._pressIntvl);
+    this._touchId = null;
 
     const { TOUCH } = this.INPUT_TYPE;
     const {
