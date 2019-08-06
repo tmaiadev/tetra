@@ -1,3 +1,5 @@
+import { vibrate } from './helpers';
+
 class Controls {
   constructor() {  
     this.KEYS = {
@@ -36,6 +38,7 @@ class Controls {
   }
 
   _fire(key, inputType) {
+    vibrate(10);
     this._listeners
       .filter(e => e.key === key)
       .forEach(e => e.fn(e.uid, inputType));

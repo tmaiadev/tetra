@@ -8,6 +8,7 @@ import {
   merge_block_with_wall,
   clear_wall,
   isMobile,
+  vibrate,
 } from './helpers';
 
 export default function() {
@@ -131,6 +132,7 @@ export default function() {
 
     if (wall[2].find(b => b === 1)) {
       state.gameOver = true;
+      vibrate([150, 30, 150, 30, 150]);
       requestAnimationFrame(render);
       return;
     }
@@ -149,6 +151,7 @@ export default function() {
         state.speed -= 10;
         const maxSpeed = isMobile ? 100 : 50;
         if (state.speed < maxSpeed) state.speed = maxSpeed;
+        vibrate(500);
 
         // update score
         state.score++;
