@@ -156,10 +156,11 @@ class Controls {
       ENTER,
       PAUSE,
     } = this.KEYS;
-    
+
     switch (key) {
       case 'arrowup':
       case 'w':
+      case ' ':
         this._fire(UP, KEYBOARD);
         break;
 

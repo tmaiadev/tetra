@@ -1,5 +1,6 @@
 import controls from './controls';
 import gameplay from './gameplay';
+import str from './strings';
 
 export default function intro() {
   const $intro = document.querySelector('.intro');
@@ -17,6 +18,6 @@ export default function intro() {
 
     $start.classList.add('hidden');
     $instructions.classList.remove('hidden');
-    $footer.innerHTML = 'Tap to Continue';
+    $footer.innerHTML = str.CONTINUE_ACTION;
   });
 }

@@ -7,6 +7,7 @@ import {
   build_empty_wall,
   merge_block_with_wall,
   clear_wall,
+  isMobile,
 } from './helpers';
 
 export default function() {
@@ -146,7 +147,8 @@ export default function() {
       clear_wall(wall, () => {
         // increase speed
         state.speed -= 10;
-        if (state.speed < 50) state.speed = 50;
+        const maxSpeed = isMobile ? 100 : 50;
+        if (state.speed < maxSpeed) state.speed = maxSpeed;
 
         // update score
         state.score++;

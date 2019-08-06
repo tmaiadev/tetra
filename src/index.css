@@ -95,6 +95,11 @@ a {
 .status {
   display: grid;
   grid-template-columns: auto auto min-content;
+  white-space: nowrap;
+}
+
+.desktop .status {
+  grid-template-columns: auto min-content;
 }
 
 .pause {
@@ -106,6 +111,10 @@ a {
   border: none;
   font-weight: normal;
   outline: none;
+}
+
+.desktop .pause {
+  display: none;
 }
 
 .alert {
