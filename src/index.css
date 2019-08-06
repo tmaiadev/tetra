@@ -14,6 +14,7 @@ body {
   justify-content: center;
   color: #6C6C6C;
   background-color: #DDFFDF;
+  user-select: none;
 }
 
 .game {
