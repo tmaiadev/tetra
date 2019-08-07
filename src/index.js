@@ -2,6 +2,7 @@ import intro from './intro';
 import { isMobile } from './helpers';
 import str from './strings';
 import * as serviceWorker from './serviceWorker';
+import innerHeight from 'ios-inner-height';
 import './index.css';
 
 // Disable bouncing scroll on iOS
@@ -15,6 +16,7 @@ document
   .add(isMobile ? 'mobile' : 'desktop');
 
 // Display strings
+document.querySelector('.game').style.height = `${innerHeight()}px`;
 document.querySelector('.start').innerHTML = str.START_ACTION;
 document.querySelector('.instructions').innerHTML = `
   <p>${str.INSTRUCTIONS}:</p>
