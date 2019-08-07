@@ -148,7 +148,7 @@ export default function() {
 
       clear_wall(wall, () => {
         // increase speed
-        state.speed -= 10;
+        state.speed -= 5;
         const maxSpeed = isMobile ? 100 : 50;
         if (state.speed < maxSpeed) state.speed = maxSpeed;
         vibrate(500);
