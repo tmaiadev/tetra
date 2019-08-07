@@ -28,6 +28,10 @@ document.querySelector('.instructions').innerHTML = `
 document.querySelector('.score-str').innerHTML = str.SCORE;
 document.querySelector('.best-str').innerHTML = str.BEST;
 
+// Prevent zoom on iOS when double tapping
+Array.from(document.querySelector('*'))
+  .forEach($el => $el.addEventListener('click', e => e.preventDefault()));
+
 // Init intro
 intro();
 
