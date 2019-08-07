@@ -1,6 +1,7 @@
 import intro from './intro';
 import { isMobile } from './helpers';
 import str from './strings';
+import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 // Disable bouncing scroll on iOS
@@ -29,3 +30,6 @@ document.querySelector('.best-str').innerHTML = str.BEST;
 
 // Init intro
 intro();
+
+// Register sw
+serviceWorker.register();
