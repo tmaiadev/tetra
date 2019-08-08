@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "typeface-vt323": "^0.0.72"
   },
   "scripts": {
     "start": "react-scripts start",

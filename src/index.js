@@ -2,6 +2,8 @@ import intro from './intro';
 import { isMobile } from './helpers';
 import str from './strings';
 import * as serviceWorker from './serviceWorker';
+import LOGO from './logo.png';
+import 'typeface-vt323';
 import './index.css';
 
 // Disable bouncing scroll on iOS
@@ -15,6 +17,7 @@ document
   .add(isMobile ? 'mobile' : 'desktop');
 
 // Display strings
+document.querySelector('.logo').src = LOGO;
 document.querySelector('.start').innerHTML = str.START_ACTION;
 document.querySelector('.instructions').innerHTML = `
   <p>${str.INSTRUCTIONS}:</p>

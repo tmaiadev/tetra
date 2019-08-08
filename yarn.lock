@@ -4175,10 +4175,6 @@ invert-kv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
 
-ios-inner-height@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ios-inner-height/-/ios-inner-height-1.1.1.tgz#987c62350a04586b4025a21fa0e8bef054b7b64e"
-
 ip-regex@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
@@ -8042,6 +8038,10 @@ type-is@~1.6.17, type-is@~1.6.18:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typeface-vt323@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-vt323/-/typeface-vt323-0.0.72.tgz#795475d3540610754db5e366dccac612c29ee4c8"
 
 uglify-js@3.4.x:
   version "3.4.10"
